@@ -1,3 +1,5 @@
+<img src="./public/logo.svg" style="width:15rem" />
+
 # Pluvia
 
 ## Situación
