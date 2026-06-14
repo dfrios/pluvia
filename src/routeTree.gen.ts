@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTwilioWhatsappV1RouteImport } from './routes/api/twilio/whatsapp/v1'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -22,31 +23,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTwilioWhatsappV1Route = ApiTwilioWhatsappV1RouteImport.update({
+  id: '/api/twilio/whatsapp/v1',
+  path: '/api/twilio/whatsapp/v1',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/api/twilio/whatsapp/v1'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/api/twilio/whatsapp/v1'
+  id: '__root__' | '/' | '/about' | '/api/twilio/whatsapp/v1'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ApiTwilioWhatsappV1Route: typeof ApiTwilioWhatsappV1Route
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/twilio/whatsapp/v1': {
+      id: '/api/twilio/whatsapp/v1'
+      path: '/api/twilio/whatsapp/v1'
+      fullPath: '/api/twilio/whatsapp/v1'
+      preLoaderRoute: typeof ApiTwilioWhatsappV1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ApiTwilioWhatsappV1Route: ApiTwilioWhatsappV1Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
