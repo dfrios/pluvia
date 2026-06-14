@@ -9,6 +9,10 @@ const getHttpStatusCode = (errorNick?: HttpNicks) => {
       break;
     case 'CREATED':
       errorNumber = 201;
+      break;
+    case 'DATA_ERROR':
+      errorNumber = 400;
+      break;
   }
 
   return errorNumber;
