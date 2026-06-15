@@ -14,16 +14,16 @@ function Supa() {
 
   console.log('>>> users', users);
 
-  // return (
-  //   <>
-  //     **{users?.length}**
-  //     <ul>
-  //       {users?.map((user) => (
-  //         <li key={user.id}>{user.name}</li>
-  //       ))}
-  //     </ul>
-  //   </>
-  // );
+  return (
+    <>
+      **{users?.length}**
+      <ul>
+        {users?.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </>
+  );
 
-  return <>HELLO3</>;
+  // return <>HELLO3</>;
 }
