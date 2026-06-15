@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { supabase } from '#/utils/supabase';
 
 export const Route = createFileRoute('/supa')({
-  // loader: async () => {
-  //   const { data: users } = await supabase.from('users').select();
-  //   return { users };
-  // },
+  loader: async () => {
+    const { data: users } = await supabase.from('users').select();
+    return { users };
+  },
   component: Supa,
 });
 
@@ -25,5 +25,5 @@ function Supa() {
   //   </>
   // );
 
-  return <>HELLO</>;
+  return <>HELLO2</>;
 }
