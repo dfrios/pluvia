@@ -10,9 +10,9 @@ export const Route = createFileRoute('/supa')({
 });
 
 function Supa() {
-  // const { users } = Route.useLoaderData();
+  const { users } = Route.useLoaderData();
 
-  // console.debug('>>> users', users);
+  console.log('>>> users', users);
 
   // return (
   //   <>
@@ -25,5 +25,5 @@ function Supa() {
   //   </>
   // );
 
-  return <>HELLO2</>;
+  return <>HELLO3</>;
 }
