@@ -13,6 +13,9 @@ const getHttpStatusCode = (errorNick?: HttpNicks) => {
     case 'DATA_ERROR':
       errorNumber = 400;
       break;
+    case 'FAILED_DATABASE_INSERT':
+      errorNumber = 500;
+      break;
   }
 
   return errorNumber;
