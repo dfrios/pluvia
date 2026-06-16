@@ -33,7 +33,7 @@ Tailwind v4 is CSS-first:
 <style type="text/tailwindcss">
   @theme {
     --color-brand: oklch(0.68 0.2 252);
-    --font-display: "Inter", sans-serif;
+    --font-display: 'Inter', sans-serif;
   }
 
   @utility headline-balance {
