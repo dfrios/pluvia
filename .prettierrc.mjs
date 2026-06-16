@@ -7,4 +7,4 @@ export default {
   bracketSpacing: true,
   htmlWhitespaceSensitivity: 'ignore',
   semi: true,
-}
+};
