@@ -1,4 +1,4 @@
-import type { HttpNicks } from '#/interfaces/http';
+import type { HttpNicks } from '#/interfaces/http.types';
 
 const getHttpStatusCode = (errorNick?: HttpNicks) => {
   let errorNumber = 200;

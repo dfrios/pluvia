@@ -1,15 +1,16 @@
+import type { Person } from '#/interfaces/app.types';
+
 import { createFileRoute } from '@tanstack/react-router';
-import { supabase } from '#/utils/supabase';
 
 import { responseSuccessful, responseError } from '#/utils/http';
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import { DatabaseClient } from '#/utils/supabase';
 
 export const Route = createFileRoute('/api/twilio/whatsapp/v1')({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
+          // Get data from request
           const formData = await request.formData();
 
           const formObj: Record<string, string> = {};
@@ -18,16 +19,29 @@ export const Route = createFileRoute('/api/twilio/whatsapp/v1')({
           });
           const infoToBeStored = JSON.stringify(formObj);
 
-          const { data, error } = await supabase
-            .from('logs')
-            .insert([{ origin: 'twilio', destination: 'database', data: infoToBeStored }])
-            .select()
-            .single();
+          const WaId = formData.get('WaId')?.toString() ?? '';
+          console.log('>>> WaId', WaId);
 
-          // console.log(data);
+          // Stops execution when WaId is empty
+          if (WaId === '') return responseError('DATA_ERROR', 'Missing WaId');
 
-          if (error) {
-            return responseError('FAILED_DATABASE_INSERT', 'Failed insert');
+          // Creates databaseClient with WaId as parameter
+          const databaseClient = new DatabaseClient(WaId);
+
+          // Logs received data to the database
+          await databaseClient.log('twilio', 'database', infoToBeStored);
+
+          // Check number already exists in DB
+          const user: Person = await databaseClient.getUser();
+          if (user) {
+            // -- TODO: Check T&C has been accepted
+            if (user.agreed_terms) {
+              // TODO: Start gauge rain flow
+            } else {
+              // TODO: Start T&C flow
+            }
+          } else {
+            // TODO: Start signing up flow
           }
 
           return responseSuccessful('CREATED', { stringified: infoToBeStored });
@@ -59,3 +73,24 @@ export const Route = createFileRoute('/api/twilio/whatsapp/v1')({
     },
   },
 });
+
+// Mensaje recibido
+// {
+//   "ExternalUserId": "whatsapp:CO.4480491918930694",
+//   "SmsMessageSid": "SMd35dc6b5e27d2858718fd7da213a625f",
+//   "NumMedia": "0",
+//   "ProfileName": "David Ríos",
+//   "MessageType": "text",
+//   "SmsSid": "SMd35dc6b5e27d2858718fd7da213a625f",
+//   "WaId": "573003255454",
+//   "SmsStatus": "received",
+//   "Body": "Hola",
+//   "To": "whatsapp:+14155238886",
+//   "NumSegments": "1",
+//   "ReferralNumMedia": "0",
+//   "MessageSid": "SMd35dc6b5e27d2858718fd7da213a625f",
+//   "AccountSid": "ACb4b407e67527c878940ad7c5181137ba",
+//   "ChannelMetadata": "{\"type\":\"whatsapp\",\"data\":{\"context\":{\"ProfileName\":\"David Ríos\",\"WaId\":\"573003255454\"}}}",
+//   "From": "whatsapp:+573003255454",
+//   "ApiVersion": "2010-04-01"
+// }
