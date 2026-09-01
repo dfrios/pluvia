@@ -1,26 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { supabase } from '#/utils/supabase';
+// import { supabase } from '#/utils/supabase';
 
 export const Route = createFileRoute('/supa')({
-  loader: async () => {
-    const { data: users } = await supabase.from('users').select();
-    return { users };
-  },
+  // loader: async () => {
+  //   const { data: users } = await supabase.from('users').select();
+  //   return { users };
+  // },
   component: Supa,
 });
 
 function Supa() {
-  const { users } = Route.useLoaderData();
+  // const { users } = Route.useLoaderData();
 
-  console.log('>>> users', users);
+  // console.log('>>> users', users);
 
   return (
     <>
-      **{users?.length}**
+      {/* **{users?.length}** */}
       <ul>
-        {users?.map((user) => (
+        {/* {users?.map((user) => (
           <li key={user.id}>{user.name}</li>
-        ))}
+        ))} */}
       </ul>
     </>
   );
