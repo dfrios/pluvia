@@ -6,7 +6,7 @@ import { responseSuccessful, responseError } from '#/utils/http';
 import { DatabaseClient } from '#/utils/supabase';
 import { MessagingClient } from '#/utils/twilio';
 
-export const Route = createFileRoute('/api/twilio/whatsapp/v1')({
+export const Route = createFileRoute('/api/meta/whatsapp/v1')({
   server: {
     handlers: {
       POST: async ({ request }) => {

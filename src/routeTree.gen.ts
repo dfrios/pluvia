@@ -13,6 +13,7 @@ import { Route as SupaRouteImport } from './routes/supa'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiTwilioWhatsappV1RouteImport } from './routes/api/twilio/whatsapp/v1'
+import { Route as ApiMetaWhatsappV1RouteImport } from './routes/api/meta/whatsapp/v1'
 
 const SupaRoute = SupaRouteImport.update({
   id: '/supa',
@@ -34,17 +35,24 @@ const ApiTwilioWhatsappV1Route = ApiTwilioWhatsappV1RouteImport.update({
   path: '/api/twilio/whatsapp/v1',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMetaWhatsappV1Route = ApiMetaWhatsappV1RouteImport.update({
+  id: '/api/meta/whatsapp/v1',
+  path: '/api/meta/whatsapp/v1',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/supa': typeof SupaRoute
+  '/api/meta/whatsapp/v1': typeof ApiMetaWhatsappV1Route
   '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/supa': typeof SupaRoute
+  '/api/meta/whatsapp/v1': typeof ApiMetaWhatsappV1Route
   '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRoutesById {
@@ -52,20 +60,38 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/supa': typeof SupaRoute
+  '/api/meta/whatsapp/v1': typeof ApiMetaWhatsappV1Route
   '/api/twilio/whatsapp/v1': typeof ApiTwilioWhatsappV1Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/supa' | '/api/twilio/whatsapp/v1'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/supa'
+    | '/api/meta/whatsapp/v1'
+    | '/api/twilio/whatsapp/v1'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/supa' | '/api/twilio/whatsapp/v1'
-  id: '__root__' | '/' | '/about' | '/supa' | '/api/twilio/whatsapp/v1'
+  to:
+    | '/'
+    | '/about'
+    | '/supa'
+    | '/api/meta/whatsapp/v1'
+    | '/api/twilio/whatsapp/v1'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/supa'
+    | '/api/meta/whatsapp/v1'
+    | '/api/twilio/whatsapp/v1'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   SupaRoute: typeof SupaRoute
+  ApiMetaWhatsappV1Route: typeof ApiMetaWhatsappV1Route
   ApiTwilioWhatsappV1Route: typeof ApiTwilioWhatsappV1Route
 }
 
@@ -99,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTwilioWhatsappV1RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/meta/whatsapp/v1': {
+      id: '/api/meta/whatsapp/v1'
+      path: '/api/meta/whatsapp/v1'
+      fullPath: '/api/meta/whatsapp/v1'
+      preLoaderRoute: typeof ApiMetaWhatsappV1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   SupaRoute: SupaRoute,
+  ApiMetaWhatsappV1Route: ApiMetaWhatsappV1Route,
   ApiTwilioWhatsappV1Route: ApiTwilioWhatsappV1Route,
 }
 export const routeTree = rootRouteImport
