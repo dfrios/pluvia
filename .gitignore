@@ -14,3 +14,4 @@ todos.json
 .antigrativycli
 # Local Netlify folder
 .netlify
+.codegraph
