@@ -11,11 +11,7 @@ export const Route = createFileRoute('/api/meta/whatsapp/v1')({
       POST: async (props) => {
         const { request } = props;
         try {
-          const formData = await request.formData();
-          const receivedData: Record<string, string> = {};
-          formData.forEach((value, key) => {
-            receivedData[key] = value.toString();
-          });
+          const receivedData = await request.json();
 
           const response = await fetch(EDGE_FUNCTION_URL, {
             method: 'POST',
