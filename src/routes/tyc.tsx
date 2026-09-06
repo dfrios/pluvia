@@ -6,6 +6,10 @@ interface TitleProps {
   children: ReactNode;
 }
 
+interface SectionProps {
+  index: number;
+}
+
 export const Route = createFileRoute('/tyc')({
   component: RouteComponent,
 });
@@ -14,7 +18,7 @@ const Title = (props: TitleProps) => {
   const { headingType, children } = props;
 
   return headingType === 'H1' ? (
-    <h1 className="font-bold text-2xl my-6">{children}</h1>
+    <h1 className="font-bold text-3xl my-6">{children}</h1>
   ) : (
     <h2 className="font-bold text-xl my-4">{children}</h2>
   );
@@ -22,7 +26,7 @@ const Title = (props: TitleProps) => {
 
 const Header = () => {
   return (
-    <div className="my-8">
+    <div className="mb-16">
       <Title headingType="H1">TÉRMINOS Y CONDICIONES DE USO DE LA PLATAFORMA "PLUVIA"</Title>
       <p>
         <span className="font-bold">Fecha de última actualización:</span> 6 de septiembre de 2026
@@ -34,10 +38,11 @@ const Header = () => {
   );
 };
 
-const Acceptance = () => {
+const Acceptance = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">1. ACEPTACIÓN DE LOS TÉRMINOS Y CONDICIONES</Title>
+      <Title headingType="H2">{index}. ACEPTACIÓN DE LOS TÉRMINOS Y CONDICIONES</Title>
       <p>
         Al interactuar con la plataforma Pluvia a través de la aplicación de mensajería WhatsApp, el
         Usuario (en adelante, "el Usuario") acepta de manera expresa, previa e informada la
@@ -49,10 +54,11 @@ const Acceptance = () => {
   );
 };
 
-const Description = () => {
+const Description = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">2. DESCRIPCIÓN DEL SERVICIO Y PROPÓSITO</Title>
+      <Title headingType="H2">{index}. DESCRIPCIÓN DEL SERVICIO Y PROPÓSITO</Title>
       <p>
         <span className="font-bold">Pluvia</span> es una plataforma tecnológica orientada a la
         recolección, procesamiento, almacenamiento y consulta colaborativa de datos pluviométricos
@@ -66,11 +72,59 @@ const Description = () => {
   );
 };
 
-const Journey = () => {
+const Treatment = (props: SectionProps) => {
+  const { index } = props;
+  return (
+    <div className="my-8">
+      <Title headingType="H2">{index}. TRATAMIENTO DE DATOS PERSONALES Y PRIVACIDAD</Title>
+      <p>
+        El tratamiento de los datos personales suministrados por el Usuario se rige conforme a la
+        legislación de la <span className="font-bold">República de Colombia</span>, específicamente
+        la <span className="font-bold">Ley Estatutaria 1581 de 2012</span>, el Decreto 1377 de 2013
+        y demás normas complementarias sobre Hábeas Data.
+      </p>
+      <ul className="my-4 list-disc list-outside pl-4 ml-4">
+        <li>
+          <span className="font-bold">Responsable del Tratamiento: </span>Asociación de Cartografía
+          Colaborativa de Colombia (AC3), con domicilio en Bogotá D.C., Carrera 45 # 61-31, oficina
+          101; correo <a href="mailto:contacto@ac3.org.co">contacto@ac3.org.co</a>, teléfono{' '}
+          <a href="tel:+573166214032">+57 316 621 4032</a>. Los titulares pueden ejercer sus
+          derechos de hábeas data escribiendo a ese correo. Para más detalle, consulte la{' '}
+          <a
+            href="https://www.ac3.org.co/informacion/politica-de-tratamiento-de-datos-personales/"
+            target="_blank"
+          >
+            Política de Tratamiento de Datos de AC3
+          </a>
+          .
+        </li>
+        <li>
+          <span className="font-bold">Datos personales objeto de tratamiento: </span>Número de
+          teléfono móvil, nombre de usuario de WhatsApp y el nombre suministrado voluntariamente
+          durante el registro.
+        </li>
+        <li>
+          <span className="font-bold">Finalidad: </span>Identificación dentro del sistema,
+          autenticación de lecturas, vinculación de registros de precipitación y notificaciones de
+          servicio.
+        </li>
+        <li>
+          <span className="font-bold">Derechos del Titular (Derechos ARCO): </span>El Usuario podrá
+          ejercer en todo momento sus derechos de conocer, actualizar, rectificar y solicitar la
+          supresión de sus datos personales enviando una solicitud directamente al correo de
+          contacto oficial (<a href="mailto:contacto@ac3.org.co">contacto@ac3.org.co</a>).
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const Journey = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
       <Title headingType="H2">
-        3. FLUJO DE INTERACCIÓN <span className="font-italic">(USER JOURNEY)</span>
+        {index}. FLUJO DE INTERACCIÓN <span className="font-italic">(USER JOURNEY)</span>
       </Title>
       <p>El uso de la plataforma sigue el siguiente procedimiento secuencial:</p>
       <ol className="my-4 list-decimal list-outside pl-4 ml-4">
@@ -109,10 +163,13 @@ const Journey = () => {
   );
 };
 
-const DataProtection = () => {
+const DataProtection = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">4. PROTECCIÓN DE DATOS PERSONALES (NORMATIVIDAD COLOMBIANA)</Title>
+      <Title headingType="H2">
+        {index}. PROTECCIÓN DE DATOS PERSONALES (NORMATIVIDAD COLOMBIANA)
+      </Title>
       <p>
         El tratamiento de los datos personales suministrados por el Usuario se rige conforme a la
         legislación de la <span className="font-bold">República de Colombia</span>, específicamente
@@ -140,10 +197,11 @@ const DataProtection = () => {
   );
 };
 
-const Privacy = () => {
+const Privacy = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">5. POLÍTICAS DE PRIVACIDAD Y SERVICIOS DE TERCEROS</Title>
+      <Title headingType="H2">{index}. POLÍTICAS DE PRIVACIDAD Y SERVICIOS DE TERCEROS</Title>
       <p>
         El funcionamiento de Pluvia depende de la integración con proveedores tecnológicos de
         infraestructura. El Usuario reconoce y acepta que el paso y almacenamiento de la información
@@ -170,10 +228,11 @@ const Privacy = () => {
   );
 };
 
-const OpenData = () => {
+const OpenData = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">6. LICENCIA Y USO DE LA INFORMACIÓN (OPEN DATA)</Title>
+      <Title headingType="H2">{index}. LICENCIA Y USO DE LA INFORMACIÓN (OPEN DATA)</Title>
       <p>
         La información meteorológica e hidrológica generada por los usuarios en la plataforma no
         constituye un dato personal sensible.
@@ -196,10 +255,11 @@ const OpenData = () => {
   );
 };
 
-const Obligations = () => {
+const Obligations = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">7. OBLIGACIONES Y USO ACEPTABLE</Title>
+      <Title headingType="H2">{index}. OBLIGACIONES Y USO ACEPTABLE</Title>
       <p>El Usuario se compromete a hacer un uso diligente de la plataforma y garantiza que:</p>
       <ul className="my-4 list-disc list-outside pl-4 ml-4">
         <li>
@@ -216,10 +276,11 @@ const Obligations = () => {
   );
 };
 
-const Modifications = () => {
+const Modifications = (props: SectionProps) => {
+  const { index } = props;
   return (
     <div className="my-8">
-      <Title headingType="H2">8. MODIFICACIONES Y CONTACTO</Title>
+      <Title headingType="H2">{index}. MODIFICACIONES Y CONTACTO</Title>
       <p>
         <span className="font-bold">Pluvia</span> se reserva el derecho de modificar los presentes
         Términos y Condiciones en cualquier momento. Cualquier actualización será notificada al
@@ -230,17 +291,19 @@ const Modifications = () => {
 };
 
 function RouteComponent() {
+  let index = 1;
   return (
-    <section className="box-container">
+    <section className="box-container my-16">
       <Header />
-      <Acceptance />
-      <Description />
-      <Journey />
-      <DataProtection />
-      <Privacy />
-      <OpenData />
-      <Obligations />
-      <Modifications />
+      <Acceptance index={index++} />
+      <Description index={index++} />
+      <Treatment index={index++} />
+      <Journey index={index++} />
+      <DataProtection index={index++} />
+      <Privacy index={index++} />
+      <OpenData index={index++} />
+      <Obligations index={index++} />
+      <Modifications index={index++} />
     </section>
   );
 }
