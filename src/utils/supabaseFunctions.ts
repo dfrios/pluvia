@@ -1,12 +1,13 @@
 import type { LogOriginDestination } from '#/interfaces/app.types';
+import { env } from 'cloudflare:workers';
 
 const log = async (
   origin: LogOriginDestination,
   destination: LogOriginDestination,
   data: Record<string, string>,
 ) => {
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-  const API_KEY = import.meta.env.VITE_SUPABASE_KEY;
+  const SUPABASE_URL = env.SUPABASE_URL;
+  const API_KEY = env.SUPABASE_KEY;
 
   const EDGE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/pluviaSetLog`;
 

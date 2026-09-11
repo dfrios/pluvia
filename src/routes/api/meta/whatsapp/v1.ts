@@ -6,6 +6,7 @@ import { responseSuccessful, responseError } from '#/utils/http';
 import { createActor } from 'xstate';
 import { pluviaWorkflow } from '#/machines/pluviaWorkflow';
 import { log } from '#/utils/supabaseFunctions';
+import { env } from 'cloudflare:workers';
 
 interface Props {
   request: Request;
@@ -130,7 +131,7 @@ export const Route = createFileRoute('/api/meta/whatsapp/v1')({
       // La petición GET es para la validación del API de WhatsApp
       GET: async (props) => {
         const { request } = props;
-        const VERIFICATION_TOKEN = import.meta.env.VITE_WHATSAPP_VERIFICATION_TOKEN;
+        const VERIFICATION_TOKEN = env.WHATSAPP_VERIFICATION_TOKEN;
 
         try {
           const url = new URL(request.url);
