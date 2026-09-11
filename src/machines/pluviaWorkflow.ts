@@ -42,7 +42,7 @@ const pluviaWorkflow = setup({
       on: {
         MESSAGE: [
           {
-            guard: 'isHi',
+            // guard: 'isHi',
             target: '#pluvia.awaitingName',
             actions: [
               // assign({name: ({event}) => event.message}),
