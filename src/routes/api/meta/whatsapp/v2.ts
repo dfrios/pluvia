@@ -1,10 +1,10 @@
-import type { WhatsAppMessage } from '#/interfaces/whatsapp';
+import type { WhatsAppFormPayload } from '#/interfaces/whatsapp';
 import type { Snapshot } from 'xstate';
 
 import { createFileRoute } from '@tanstack/react-router';
 import { responseSuccessful, responseError } from '#/utils/http';
 import { createActor } from 'xstate';
-import { pluviaWorkflow } from '#/machines/pluviaWorkflow';
+import { pluviaWorkflow } from '#/machine/pluviaWorkflow';
 
 interface Props {
   request: Request;
@@ -31,9 +31,9 @@ export const Route = createFileRoute('/api/meta/whatsapp/v2')({
         try {
           const body = await request.formData();
 
-          const bodyJson = {} as WhatsAppMessage;
+          const bodyJson = {} as WhatsAppFormPayload;
           body.forEach((value, key) => {
-            bodyJson[key as keyof WhatsAppMessage] = value.toString();
+            bodyJson[key as keyof WhatsAppFormPayload] = value.toString();
           });
 
           const idUser = bodyJson.From;

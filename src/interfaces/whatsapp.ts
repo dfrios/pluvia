@@ -70,4 +70,9 @@ interface WhatsAppWebhookPayload {
 //   ApiVersion: string;
 // }
 
-export type { WhatsAppWebhookPayload };
+interface WhatsAppFormPayload {
+  From: string;
+  Body: string;
+}
+
+export type { WhatsAppWebhookPayload, WhatsAppFormPayload };
