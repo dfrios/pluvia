@@ -15,6 +15,6 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', '**/*.d.ts', '.github/', '.agents/', '.qwen/'],
+    ignores: ['dist/**', 'BORRAR/**', '**/*.d.ts', '.github/', '.agents/', '.qwen/'],
   },
 ];

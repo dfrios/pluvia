@@ -1,10 +1,12 @@
 {
   "include": ["**/*.ts", "**/*.tsx", "eslint.config.js", ".prettierrc.mjs", "vite.config.js"],
+  "exclude": ["BORRAR", "dist", "node_modules"],
 
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
+    "allowJs": true,
     "paths": {
       "#/*": ["./src/*"],
       "@/*": ["./src/*"]
