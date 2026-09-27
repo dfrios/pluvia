@@ -1,5 +1,5 @@
 import { createActor } from 'xstate';
-import { workflowMachine } from '#/machines/workflow.machine';
+import { workflowMachine } from '#/machine/workflow.machine';
 
 // Replace with real database persistence
 const mockDbStore: Record<string, string> = {

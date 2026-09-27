@@ -1,3 +1,4 @@
+import { whatsAppSendText } from '#/utils/whatsAppFunctions';
 import { setup, assign } from 'xstate';
 
 interface Message {
@@ -14,7 +15,10 @@ const pluviaWorkflow = setup({
     events: {} as Message | Cancel,
   },
   guards: {
-    isHi: ({ event }) => event.type === 'MESSAGE' && event.message.trim().toUpperCase() === 'HI',
+    isHi: ({ event }) => {
+      whatsAppSendText('Bienvenido');
+      return event.type === 'MESSAGE' && event.message.trim().toUpperCase() === 'HI';
+    },
   },
   actions: {
     logTransition: (_, params: { step: string; message: string }) => {
