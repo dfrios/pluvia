@@ -1,42 +1,33 @@
-import type { WhatsAppMessage } from '#/interfaces/whatsapp';
-import type { Snapshot } from 'xstate';
+import type { WhatsAppWebhookPayload } from '#/interfaces/whatsapp';
 
 import { createFileRoute } from '@tanstack/react-router';
 import { responseSuccessful, responseError } from '#/utils/http';
-import { createActor } from 'xstate';
-import { pluviaWorkflow } from '#/machines/pluviaWorkflow';
-import { log } from '#/utils/supabaseFunctions';
+import { processData } from '#/utils/processData';
 import { env } from 'cloudflare:workers';
+import { log, createUser, getUser } from '#/utils/supabaseFunctions';
 
 interface Props {
   request: Request;
+  context?: any;
 }
 
-/**
- * ********************************************
- */
-// TODO: El estado se debe obtener y guardar en la BD
-const stateStore: Record<string, Snapshot<unknown>> = {};
-
-async function loadState(idUser: string): Promise<Snapshot<unknown> | null> {
-  console.debug('>> current snapshot', stateStore[idUser]);
-  return stateStore[idUser] ?? null;
+interface UserJsonMessage {
+  id: string;
+  name: string;
+  agreed_terms: boolean;
+  status: string | null;
+  status_updated_at: string;
 }
-
-async function saveState(idUser: string, snapshot: Snapshot<unknown>) {
-  stateStore[idUser] = snapshot;
-  console.debug('>> new snapshot', snapshot);
-  console.debug('>> stateStore[idUser]', stateStore[idUser]);
+interface UserJson {
+  error: boolean;
+  message?: Array<UserJsonMessage>;
 }
-/**
- * ********************************************
- */
 
 export const Route = createFileRoute('/api/meta/whatsapp/v1')({
   server: {
     handlers: {
       POST: async (props) => {
-        const { request }: Props = props;
+        const { request, context }: Props = props;
         try {
           // const body = await request.formData();
           // const receivedData = {} as WhatsAppMessage;
@@ -46,79 +37,112 @@ export const Route = createFileRoute('/api/meta/whatsapp/v1')({
 
           // EJEMPLO DE MENSAJE RECIBIDO
           // {
-          //   object: 'whatsapp_business_account',
-          //   entry: [
+          //   "object": "whatsapp_business_account",
+          //   "entry": [
           //     {
-          //       id: '102290129340398',
-          //       changes: [
+          //       "id": "1103754045644673",
+          //       "changes": [
           //         {
-          //           value: {
-          //             messaging_product: 'whatsapp',
-          //             metadata: {
-          //               display_phone_number: '15550783881',
-          //               phone_number_id: '106540352242922',
+          //           "value": {
+          //             "messaging_product": "whatsapp",
+          //             "metadata": {
+          //               "display_phone_number": "15556771269",
+          //               "phone_number_id": "1287821667750517"
           //             },
-          //             contacts: [
+          //             "contacts": [
           //               {
-          //                 profile: {
-          //                   name: 'Sheena Nelson',
+          //                 "profile": {
+          //                   "name": "David Ríos",
+          //                   "username": "dfrios"
           //                 },
-          //                 wa_id: '16505551234',
-          //               },
+          //                 "wa_id": "573003255454",
+          //                 "user_id": "CO.1738011794994683",
+          //                 "country_code": "CO"
+          //               }
           //             ],
-          //             messages: [
+          //             "messages": [
           //               {
-          //                 from: '16505551234',
-          //                 id: 'wamid.HBgLMTY1MDM4Nzk0MzkVAgASGBQzQTRBNjU5OUFFRTAzODEwMTQ0RgA=',
-          //                 timestamp: '1749416383',
-          //                 type: 'text',
-          //                 text: {
-          //                   body: 'Does it come in another color?',
+          //                 "from": "573003255454",
+          //                 "from_user_id": "CO.1738011794994683",
+          //                 "id": "wamid.HBgMNTczMDAzMjU1NDU0FQIAEhgWM0VCMDQ0NTMzMkQ1MDQ1REVCODA1OAA=",
+          //                 "timestamp": "1789319992",
+          //                 "text": {
+          //                   "body": "Mensaje desde Testing"
           //                 },
-          //               },
-          //             ],
+          //                 "from_logical_id": "126044539453559",
+          //                 "type": "text",
+          //                 "internal_1p_only_data": {
+          //                   "account_context": {
+          //                     "waac_id": "1403008784594539",
+          //                     "cs_id": "1287821667750517",
+          //                     "account_context_type": "non_paid_messaging"
+          //                   }
+          //                 }
+          //               }
+          //             ]
           //           },
-          //           field: 'messages',
-          //         },
-          //       ],
-          //     },
-          //   ],
+          //           "field": "messages"
+          //         }
+          //       ]
+          //     }
+          //   ]
           // }
 
-          const receivedData = await request.json();
-          // const userId = receivedData.entry[0].changes[0].value.contacts[0].wa_id;
-          // const userRealName = receivedData.entry[0].changes[0].value.contacts[0].profile.name;
-          // const message = receivedData.entry[0].changes[0].value.messages[0].text.body;
-          // console.debug('idUser: ', userId);
-          // console.debug('userRealName: ', userRealName);
-          // console.debug('message: ', message);
+          const receivedData: WhatsAppWebhookPayload = await request.json();
 
-          // const savedSnapshot = await loadState(userId);
-          // const actor = savedSnapshot
-          //   ? createActor(pluviaWorkflow, { snapshot: savedSnapshot })
-          //   : createActor(pluviaWorkflow);
+          context.waitUntil(
+            log('meta', 'pluvia', receivedData as unknown as Record<string, string>).catch(
+              (error) => {
+                console.error('Background logging error:', error);
+              },
+            ),
+          );
 
-          // actor.start();
+          // const username =
+          //   receivedData.entry[0]?.changes[0]?.value?.contacts[0]?.profile?.username ?? '';
+          // const name = receivedData.entry[0]?.changes[0]?.value?.contacts[0]?.profile?.name ?? '';
+          // const cellphone = receivedData.entry[0]?.changes[0]?.value?.contacts[0]?.wa_id;
 
-          // const isCancel = message.trim().toUpperCase() === 'CANCEL';
-          // actor.send(isCancel ? { type: 'CANCEL' } : { type: 'MESSAGE', message });
+          // if (!cellphone) {
+          //   return responseError('DATA_ERROR', 'Invalid webhook payload: missing cellphone');
+          // }
 
-          // const newSnapshot = actor.getPersistedSnapshot();
-          // await saveState(userId, newSnapshot);
-          // actor.stop();
+          // const userResponse = await getUser(cellphone, username);
+          // const userJson: UserJson = await userResponse.json();
 
-          // Registra log en BD
-          const response = await log('meta', 'pluvia', receivedData);
-          const result = await response.json();
+          // /**
+          //  * Si no existe el usuario, lo crea en la base de datos
+          //  */
+          // let userId = userJson.message?.[0]?.id ?? '';
+          // // console.debug('>> userJson.message?.[0]?.id', userJson.message?.[0]?.id);
+          // if (!userJson.message?.[0]?.id) {
+          //   const createResponse = await createUser(cellphone, username, name);
+          //   userId = typeof createResponse.message === 'string' ? createResponse.message : '';
+          // }
 
-          if (!response.ok) {
-            return responseError(
-              'DATA_ERROR',
-              `Supabase function error: ${result.message || response.statusText}`,
-            );
-          }
+          // const user = {
+          //   id: userId,
+          //   name: userJson.message?.[0]?.name ?? '',
+          //   agreedTerms: userJson.message?.[0]?.agreed_terms ?? false,
+          //   status: JSON.parse(userJson.message?.[0]?.status ?? 'null'),
+          // };
+          // console.debug('>> user', user);
 
-          return responseSuccessful('OK', result);
+          // // Procesa los datos
+          // const processedData = await processData(
+          //   user.id,
+          //   user.name,
+          //   user.agreedTerms,
+          //   user.status,
+          //   receivedData.entry[0]?.changes[0]?.value?.messages?.[0]?.text?.body ?? '',
+          //   // receivedData as unknown as Record<string, string>,
+          // );
+
+          // if (!processedData.ok) {
+          //   return responseError('DATA_ERROR', `Supabase function error: ${processedData.message}`);
+          // }
+
+          return responseSuccessful('OK', {});
           // return responseSuccessful('OK', newSnapshot);
         } catch (error: unknown) {
           return responseError(
